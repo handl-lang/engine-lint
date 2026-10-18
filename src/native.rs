@@ -177,7 +177,7 @@ pub const CANONICAL_LINT_NATIVES: &[&str] = &[
 /// These are the rules that need cross-statement scope analysis, raw
 /// source access, or per-statement AST walks — the semantic residue that
 /// stays Rust, mirroring the `desugar.*` natives in
-/// `plugin-engine-transform-rewrite`. `source.fmt` is registered here as a
+/// `hnl-engine-transform-rewrite`. `source.fmt` is registered here as a
 /// no-op so canonical `lints.yaml` resolves cleanly for hosts without a
 /// formatter; `plugin-ext-lint` overrides it with the real formatter-backed
 /// implementation.

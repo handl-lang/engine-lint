@@ -1,4 +1,4 @@
-//! # handl-plugin-engine-lint
+//! # hnl-engine-lint
 //!
 //! The data-driven AST lint engine (ADR-0044 §3). Walks an [`Ast`] using
 //! [`handl_language::Language`] data to produce expression-level diagnostics.
