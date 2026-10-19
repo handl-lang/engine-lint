@@ -3,7 +3,7 @@ name = "hnl-engine-lint"
 version = "0.1.0"
 edition = "2024"
 description = "The data-driven AST lint engine (ADR-0044 §3). Walks an [`Ast`] using [`handl_language::Language`] data to produce expression-level diagnostics."
-license = "MIT OR Apache-2.0"
+license = "MIT"
 repository = "https://github.com/handl-lang/engine-lint"
 
 [dependencies]
