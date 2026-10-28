@@ -16,11 +16,11 @@
 use std::collections::HashSet;
 
 use handl_language::{Ast, AstNode, AstRef, LangError, Language, LintFix, LintRuleDef, Span};
+use handl_plugin_ext_diag::split_statements;
 use hnl_engine_lex_pattern::lex;
 use hnl_engine_parse::{ParserEngine, ParserRequest};
 use hnl_engine_parse_pratt::PrattEngine;
 use hnl_engine_transform_rewrite::condition::matches_condition;
-use handl_plugin_ext_diag::split_statements;
 
 use crate::{DiagnosticLevel, LintDiagnostic, LintFixOut};
 

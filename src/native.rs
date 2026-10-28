@@ -516,10 +516,10 @@ fn walk_shadows(
     let Ok(node) = ast.at(r) else { return };
 
     // Report a shadow before binding it in the current scope.
-    if let Some(name) = classifier.binding_name(lang, ast, node) {
-        if scope.shadows(&name) {
-            hits.push(NativeHit::named(name, absolute(node.span, offset)));
-        }
+    if let Some(name) = classifier.binding_name(lang, ast, node)
+        && scope.shadows(&name)
+    {
+        hits.push(NativeHit::named(name, absolute(node.span, offset)));
     }
 
     let is_block = classifier.is_block(lang, node);
@@ -534,19 +534,18 @@ fn walk_shadows(
     let params_idx = lang.child_role_index(&node.kind, "params").ok().flatten();
     if let Some(pi) = params_idx {
         let children = child_indices(node);
-        if let Some(&pref) = children.get(pi) {
-            if let Ok(params_node) = ast.at(AstRef::new(pref)) {
-                if let Ok((names, _rest)) = lang.param_names(ast, params_node) {
-                    for name in names {
-                        if scope.shadows(&name) {
-                            hits.push(NativeHit::named(
-                                name.clone(),
-                                absolute(params_node.span, offset),
-                            ));
-                        }
-                        scope.bind(&name);
-                    }
+        if let Some(&pref) = children.get(pi)
+            && let Ok(params_node) = ast.at(AstRef::new(pref))
+            && let Ok((names, _rest)) = lang.param_names(ast, params_node)
+        {
+            for name in names {
+                if scope.shadows(&name) {
+                    hits.push(NativeHit::named(
+                        name.clone(),
+                        absolute(params_node.span, offset),
+                    ));
                 }
+                scope.bind(&name);
             }
         }
     }
@@ -590,6 +589,9 @@ fn unused_binding_single(ctx: &LintCtx<'_>) -> Vec<NativeHit> {
     hits
 }
 
+// The binding walk threads the whole lint context (arena, node, language,
+// classifier, scope, hits); bundling would only add indirection.
+#[allow(clippy::too_many_arguments)]
 fn walk_bindings(
     ast: &Ast,
     r: AstRef,
@@ -603,10 +605,8 @@ fn walk_bindings(
     let Ok(node) = ast.at(r) else { return };
     // A top-level statement root is the module/export surface; only nested
     // bindings are checked for unused references.
-    if !is_root {
-        if let Some(name) = classifier.binding_name(lang, ast, node) {
-            bindings.push((name, absolute(node.span, offset)));
-        }
+    if !is_root && let Some(name) = classifier.binding_name(lang, ast, node) {
+        bindings.push((name, absolute(node.span, offset)));
     }
     if let Some(name) = classifier.reference_name(lang, ast, node) {
         references.insert(name);
