@@ -17,10 +17,9 @@ use std::collections::HashSet;
 
 use handl_language::{Ast, AstNode, AstRef, LangError, Language, LintFix, LintRuleDef, Span};
 use handl_plugin_ext_diag::split_statements;
-use hnl_engine_lex_pattern::lex;
+use hnl_engine_lex::{LexerEngine, LexerRequest};
 use hnl_engine_parse::{ParserEngine, ParserRequest};
-use hnl_engine_parse_pratt::PrattEngine;
-use hnl_engine_transform_rewrite::condition::matches_condition;
+use hnl_engine_transform::condition::matches_condition;
 
 use crate::{DiagnosticLevel, LintDiagnostic, LintFixOut};
 
@@ -52,14 +51,23 @@ pub struct LintModule<'a> {
 /// # Errors
 ///
 /// Returns [`LangError`] if any chunk fails to lex or parse.
-pub fn parse_module<'a>(lang: &Language, src: &'a str) -> Result<LintModule<'a>, LangError> {
+pub fn parse_module<'a, L, P>(
+    lang: &Language,
+    src: &'a str,
+    lexer: &L,
+    parser: &P,
+) -> Result<LintModule<'a>, LangError>
+where
+    L: LexerEngine + ?Sized,
+    P: ParserEngine + ?Sized,
+{
     let mut statements = Vec::new();
     for chunk in split_statements(src) {
-        let tokens = lex(lang, &chunk.text)?;
+        let tokens = lexer.lex(lang, &LexerRequest::new(chunk.text.as_str()))?;
         if tokens.as_slice().is_empty() {
             continue;
         }
-        let ast = PrattEngine::new().parse(lang, &ParserRequest::new(tokens))?;
+        let ast = parser.parse(lang, &ParserRequest::new(tokens))?;
         if ast.is_empty() {
             continue;
         }

@@ -220,12 +220,18 @@ impl LintEngine {
     ///
     /// Returns [`LangError`] if any statement fails to lex/parse or a rule
     /// fails (see [`lint_module`](Self::lint_module)).
-    pub fn lint_source(
+    pub fn lint_source<L, P>(
         &self,
         lang: &Language,
         src: &str,
-    ) -> Result<Vec<LintDiagnostic>, LangError> {
-        let module = parse_module(lang, src)?;
+        lexer: &L,
+        parser: &P,
+    ) -> Result<Vec<LintDiagnostic>, LangError>
+    where
+        L: hnl_engine_lex::LexerEngine + ?Sized,
+        P: hnl_engine_parse::ParserEngine + ?Sized,
+    {
+        let module = parse_module(lang, src, lexer, parser)?;
         self.lint_module(lang, &module)
     }
 
