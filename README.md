@@ -3,6 +3,9 @@
 Rule-based linter: evaluates a `lang.lints` table of `LintRuleDef`s plus named
 native checks over a parsed module — rules are data, not Rust matches.
 
+An `engine-*` crate: a **tool** engine in the family (not one of the five
+operation slots).
+
 ```rust
 use hnl_engine_lint::LintEngine;
 
@@ -10,25 +13,25 @@ let engine = LintEngine::new();
 let diagnostics = engine.lint_module(&lang, &module)?; // rules come from `lang.lints`
 ```
 
-Part of the `engine-*` family (see `docs/engines`): a **tool**, not one of the
-five operation slots. `LintCheck::Match { node_kind, when }` covers structural
-rules; `LintCheck::Native(name)` covers the built-ins (`builtin.empty-block`,
-`builtin.unreachable-code`, `builtin.shadowed-binding`, `builtin.unused-binding`).
-
-## Docs
-
-- [Reference](https://handl-lang.github.io/docs/engine-lint/reference/) — public API
-- [How-to](https://handl-lang.github.io/docs/engine-lint/how-to/) — task recipes
-- [Explanation](https://handl-lang.github.io/docs/engine-lint/explanation/) — design
+`LintCheck::Match { node_kind, when }` covers structural rules;
+`LintCheck::Native(name)` covers the built-ins (`builtin.empty-block`,
+`builtin.unreachable-code`, `builtin.shadowed-binding`,
+`builtin.unused-binding`).
 
 ## Development
 
 ```bash
-cargo test     # deps resolve from git; no sibling checkouts needed
+cargo xtask gate        # fmt --check → clippy -D warnings → test → doc
 ```
 
-`ci.sh` is the gate: `fmt --check` → `clippy -D warnings` → `test` → `doc -D warnings`.
+`cargo xtask` wraps the repo's `xtask/` crate (`fmt`, `clippy`, `test`, `doc`,
+`check`, `gate`); `ci.sh` is the gate entry. Deps resolve from git, so no
+sibling checkouts are needed; a plain clone test-runs as-is.
 
 ## License
 
 MIT.
+
+## Documentation
+
+<https://handl-lang.github.io/docs/engine-lint/>
