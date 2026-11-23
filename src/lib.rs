@@ -25,11 +25,18 @@ use std::collections::HashMap;
 
 use handl_language::{Ast, AstNode, AstRef, GrammarPosition, LangError, Language, LintCheck, Span};
 
+/// Byte-splice fix application: [`fix_batch`], [`apply_fix_batch`],
+/// [`fixpoint`], and [`LintEngine::fix_source`](crate::LintEngine::fix_source)
+/// (PL-004 T-091 — the lint `--fix` engine half; Change materialization
+/// is `hnl-engine-codemod`'s `plan_byte_edits`).
+pub mod fix;
 /// Module-level linting: statement splitting, parsing, and the shared
 /// per-statement [`ModuleAnalysis`](module::ModuleAnalysis).
 pub mod module;
 /// Native lint rules and the [`NativeLintRegistry`](native::NativeLintRegistry).
 pub mod native;
+
+pub use fix::{FixHit, FixpointOutcome, LintFixError, apply_fix_batch, fix_batch, fixpoint};
 
 pub use module::{LintModule, LintStatement, ModuleAnalysis, parse_module};
 pub use native::{
