@@ -6,7 +6,7 @@ Lint rules are language data. The engine supplies the evaluation strategy and a 
 
 ## Where it sits
 
-This crate belongs to the `engine-*` family. Plugins, kits and hosts reach it
+This crate belongs to the `tool-*` family. Plugins, kits and hosts reach it
 through the kit's slot, so it can be swapped without touching a language
 definition.
 

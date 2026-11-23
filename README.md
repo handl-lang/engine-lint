@@ -3,7 +3,7 @@
 Rule-based linter: evaluates a `lang.lints` table of `LintRuleDef`s plus named
 native checks over a parsed module — rules are data, not Rust matches.
 
-An `engine-*` crate: a **tool** engine in the family (not one of the five
+A `tool-*` crate: a **tool** engine in the family (not one of the five
 operation slots).
 
 ```rust

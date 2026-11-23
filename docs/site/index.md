@@ -4,7 +4,7 @@ A rule-based linter over a parsed module: `lang.lints` rows plus named native ch
 
 ## What it is
 
-A **tool** in the `engine-*` family. Lint rules are language data. The engine supplies the evaluation strategy and a small set of native checks (scope, shadowing, reachability) the declarative vocabulary cannot yet express.
+A **tool** in the `tool-*` family. Lint rules are language data. The engine supplies the evaluation strategy and a small set of native checks (scope, shadowing, reachability) the declarative vocabulary cannot yet express.
 
 ## Start here
 
