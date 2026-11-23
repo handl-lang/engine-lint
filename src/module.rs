@@ -17,9 +17,9 @@ use std::collections::HashSet;
 
 use handl_language::{Ast, AstNode, AstRef, LangError, Language, LintFix, LintRuleDef, Span};
 use handl_plugin_ext_diag::split_statements;
-use hnl_engine_lex::{LexerEngine, LexerRequest};
-use hnl_engine_parse::{ParserEngine, ParserRequest};
-use hnl_engine_transform::condition::matches_condition;
+use hnl_tool_lex::{LexerEngine, LexerRequest};
+use hnl_tool_parse::{ParserEngine, ParserRequest};
+use hnl_tool_transform::condition::matches_condition;
 
 use crate::{DiagnosticLevel, LintDiagnostic, LintFixOut};
 

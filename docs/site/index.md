@@ -1,4 +1,4 @@
-# engine-lint
+# tool-lint
 
 A rule-based linter over a parsed module: `lang.lints` rows plus named native checks.
 
@@ -8,9 +8,9 @@ A **tool** in the `engine-*` family. Lint rules are language data. The engine su
 
 ## Start here
 
-- **Reference** — [public API](/engine-lint/reference/)
-- **How-to** — [task recipes](/engine-lint/how-to/)
-- **Explanation** — [design and rationale](/engine-lint/explanation/)
+- **Reference** — [public API](/tool-lint/reference/)
+- **How-to** — [task recipes](/tool-lint/how-to/)
+- **Explanation** — [design and rationale](/tool-lint/explanation/)
 
 No tutorials: this repo is a building block used from Rust. End-to-end
 walkthroughs live with the product that composes it — see the

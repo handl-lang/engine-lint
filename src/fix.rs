@@ -17,10 +17,10 @@
 //!
 //! What this module deliberately does *not* do: turn fixes into
 //! `Change`s or write files. The converged fix set is legitimate
-//! desired-state — `hnl-engine-codemod`'s
-//! [`CodemodEngine::plan_byte_edits`](https://docs.rs/hnl-engine-codemod)
+//! desired-state — `hnl-tool-codemod`'s
+//! [`CodemodEngine::plan_byte_edits`](https://docs.rs/hnl-tool-codemod)
 //! accepts each [`FixHit`] mapped to a `ByteEdit` and emits journaled,
-//! revertable `Change::Put`s through `hnl-engine-codegen`. That wiring
+//! revertable `Change::Put`s through `hnl-tool-codegen`. That wiring
 //! (and the `hnl lint --fix` command path) is plugin-side.
 
 use std::fmt;
@@ -220,7 +220,7 @@ impl LintEngine {
     ///
     /// The returned [`FixpointOutcome::source`] is the fixed text and
     /// [`FixpointOutcome::rounds`] the per-round [`FixHit`]s; handing
-    /// each hit's `fix` fields plus `rule` to `hnl-engine-codemod`'s
+    /// each hit's `fix` fields plus `rule` to `hnl-tool-codemod`'s
     /// `ByteEdit` and calling
     /// `CodemodEngine::plan_byte_edits` per artifact turns the result
     /// into journaled, revertable `Change`s (the host-side wiring seam —
@@ -240,8 +240,8 @@ impl LintEngine {
         max_iterations: usize,
     ) -> Result<FixpointOutcome, LintFixError>
     where
-        L: hnl_engine_lex::LexerEngine + ?Sized,
-        P: hnl_engine_parse::ParserEngine + ?Sized,
+        L: hnl_tool_lex::LexerEngine + ?Sized,
+        P: hnl_tool_parse::ParserEngine + ?Sized,
     {
         fixpoint(src, max_iterations, |s| {
             self.lint_source(lang, s, lexer, parser)

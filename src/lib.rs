@@ -1,4 +1,4 @@
-//! # hnl-engine-lint
+//! # hnl-tool-lint
 //!
 //! The data-driven AST lint engine (ADR-0044 §3). Walks an [`Ast`] using
 //! [`handl_language::Language`] data to produce expression-level diagnostics.
@@ -28,7 +28,7 @@ use handl_language::{Ast, AstNode, AstRef, GrammarPosition, LangError, Language,
 /// Byte-splice fix application: [`fix_batch`], [`apply_fix_batch`],
 /// [`fixpoint`], and [`LintEngine::fix_source`](crate::LintEngine::fix_source)
 /// (PL-004 T-091 — the lint `--fix` engine half; Change materialization
-/// is `hnl-engine-codemod`'s `plan_byte_edits`).
+/// is `hnl-tool-codemod`'s `plan_byte_edits`).
 pub mod fix;
 /// Module-level linting: statement splitting, parsing, and the shared
 /// per-statement [`ModuleAnalysis`](module::ModuleAnalysis).
@@ -235,8 +235,8 @@ impl LintEngine {
         parser: &P,
     ) -> Result<Vec<LintDiagnostic>, LangError>
     where
-        L: hnl_engine_lex::LexerEngine + ?Sized,
-        P: hnl_engine_parse::ParserEngine + ?Sized,
+        L: hnl_tool_lex::LexerEngine + ?Sized,
+        P: hnl_tool_parse::ParserEngine + ?Sized,
     {
         let module = parse_module(lang, src, lexer, parser)?;
         self.lint_module(lang, &module)

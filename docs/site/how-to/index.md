@@ -1,6 +1,6 @@
 # How-to guides
 
-Task recipes for `engine-lint`.
+Task recipes for `tool-lint`.
 
 ## Run the gate
 
@@ -12,8 +12,8 @@ Task recipes for `engine-lint`.
 ## Use it from Rust
 
 ```bash
-cargo add --git https://github.com/handl-lang/engine-lint --branch main
+cargo add --git https://github.com/handl-lang/tool-lint --branch main
 ```
 
-See the [reference](/engine-lint/reference/) for the types involved and the
-[explanation](/engine-lint/explanation/) for why the crate is shaped this way.
+See the [reference](/tool-lint/reference/) for the types involved and the
+[explanation](/tool-lint/explanation/) for why the crate is shaped this way.

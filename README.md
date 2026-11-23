@@ -1,4 +1,4 @@
-# engine-lint
+# tool-lint
 
 Rule-based linter: evaluates a `lang.lints` table of `LintRuleDef`s plus named
 native checks over a parsed module — rules are data, not Rust matches.
@@ -7,7 +7,7 @@ An `engine-*` crate: a **tool** engine in the family (not one of the five
 operation slots).
 
 ```rust
-use hnl_engine_lint::LintEngine;
+use hnl_tool_lint::LintEngine;
 
 let engine = LintEngine::new();
 let diagnostics = engine.lint_module(&lang, &module)?; // rules come from `lang.lints`
@@ -34,4 +34,4 @@ MIT.
 
 ## Documentation
 
-<https://handl-lang.github.io/docs/engine-lint/>
+<https://handl-lang.github.io/docs/tool-lint/>
