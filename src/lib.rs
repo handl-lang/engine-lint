@@ -770,7 +770,7 @@ mod tests {
     // --- ADR-0097: `lang.lints` rule dispatch (lint_module) ----------------
 
     /// A language with a `paren` shape (role `body`) and a `var` leaf, for
-    /// Match-rule tests. The statement `x = (y)` is assembled by hand — the
+    /// Match-rule tests. The statement `x := (y)` is assembled by hand — the
     /// toy language is not lexable, so we bypass `parse_module`.
     fn paren_lang() -> Language {
         let mut lang = test_lang();
@@ -786,18 +786,18 @@ mod tests {
         lang
     }
 
-    /// The module `x = (y)`: a `paren` node spanning bytes 4..7 wrapping a
-    /// `var` leaf `y` at 5..6.
+    /// The module `x := (y)`: a `paren` node spanning bytes 5..8 wrapping a
+    /// `var` leaf `y` at 6..7.
     fn paren_module(src: &str) -> LintModule<'_> {
         let mut ast = Ast::new();
         let var = ast.push(
             AstNode::new("var")
-                .with_span(Span { start: 5, end: 6 })
+                .with_span(Span { start: 6, end: 7 })
                 .with_payload(json!("y")),
         );
         let paren = ast.push(
             AstNode::new("paren")
-                .with_span(Span { start: 4, end: 7 })
+                .with_span(Span { start: 5, end: 8 })
                 .with_payload(json!({"children": [var.index()]})),
         );
         LintModule {
@@ -832,19 +832,19 @@ mod tests {
                 }),
             )
             .unwrap();
-        let module = paren_module("x = (y)");
+        let module = paren_module("x := (y)");
         let diags = LintEngine::new().lint_module(&lang, &module).unwrap();
         assert_eq!(diags.len(), 1);
         let d = &diags[0];
         assert_eq!(d.rule, "simplify-paren");
         assert_eq!(d.level, DiagnosticLevel::Warning);
         assert_eq!(d.message, "redundant parentheses around 'y'");
-        assert_eq!(d.span, Some(Span { start: 4, end: 7 }));
+        assert_eq!(d.span, Some(Span { start: 5, end: 8 }));
         assert_eq!(
             d.fix,
             Some(LintFixOut {
-                start: 4,
-                end: 7,
+                start: 5,
+                end: 8,
                 replacement: "y".into()
             })
         );
@@ -866,7 +866,7 @@ mod tests {
                 },
             ))
             .unwrap();
-        let module = paren_module("x = (y)");
+        let module = paren_module("x := (y)");
         let diags = LintEngine::new().lint_module(&lang, &module).unwrap();
         assert!(diags.is_empty());
     }
@@ -883,9 +883,9 @@ mod tests {
                 LintCheck::Native("test.always".into()),
             ))
             .unwrap();
-        let module = paren_module("x = (y)");
+        let module = paren_module("x := (y)");
         let engine = LintEngine::new().with_native("test.always", |ctx| {
-            assert_eq!(ctx.src, "x = (y)");
+            assert_eq!(ctx.src, "x := (y)");
             assert_eq!(ctx.module.len(), 1);
             Ok(vec![NativeHit::named("thing", Span { start: 0, end: 1 })])
         });
@@ -908,7 +908,7 @@ mod tests {
                 LintCheck::Native("test.missing".into()),
             ))
             .unwrap();
-        let module = paren_module("x = (y)");
+        let module = paren_module("x := (y)");
         let err = LintEngine::new().lint_module(&lang, &module).unwrap_err();
         assert!(format!("{err}").contains("test.missing"), "{err}");
     }
@@ -928,7 +928,7 @@ mod tests {
                 },
             ))
             .unwrap();
-        let module = paren_module("x = (y)");
+        let module = paren_module("x := (y)");
         let err = LintEngine::new().lint_module(&lang, &module).unwrap_err();
         assert!(format!("{err}").contains("bogus"), "{err}");
     }
